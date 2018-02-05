@@ -1,0 +1,13 @@
+{
+  "name": "yourappname",
+  "homepage": "https://www.jamiewade.co.uk",
+  "version": "0.1",
+  "author": "Jamie Wade",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^3.0.0",
+    "gulp-uglify": "^2.0.0"
+  }
+}
