@@ -1,7 +1,7 @@
 {
   "name": "yourappname",
   "homepage": "https://www.jamiewade.co.uk",
-  "version": "0.1",
+  "version": "0.1.0",
   "author": "Jamie Wade",
   "devDependencies": {
     "gulp": "^3.9.1",
