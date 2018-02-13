@@ -1,36 +1,75 @@
+//------------------------------------------------------------------------------------------------------
+// Environment variables
+//------------------------------------------------------------------------------------------------------
+
+var env = require('./env.json');
+    destination = env.destination,
+    sassFile = env.sassFile,
+    jsFolder = env.jsFolder,
+    generatedJsFile = env.generatedJsFile;
+
+
+//------------------------------------------------------------------------------------------------------
+// Dependencies
+//------------------------------------------------------------------------------------------------------
+
 var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCSS = require('gulp-clean-css'),
+    color = require('gulp-color'),
     concat = require('gulp-concat'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
 
-//------------------------------------------------------------------------------------------------------
-// SASS
-//------------------------------------------------------------------------------------------------------
+// Only run the tasks if a destination folder has been defined
+if (destination) {
 
-gulp.task('styles', function() {
-    gulp.src('../source/sass/style.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(autoprefixer())
-        .pipe(gulp.dest('../web/_/'));
-});
+    //------------------------------------------------------------------------------------------------------
+    // Sass
+    //------------------------------------------------------------------------------------------------------
+
+    gulp.task('styles', function() {
+        if (sassFile) {
+            gulp.src(sassFile)
+                .pipe(sass().on('error', sass.logError))
+                .pipe(cleanCSS({compatibility: 'ie8'}))
+                .pipe(autoprefixer())
+                .pipe(gulp.dest(destination));
+        } else {
+            console.log(color('ERROR', 'RED'));
+            console.log(color('You need to specify which folder contains your Sass files. Check env.example.json for an example.', 'RED'));
+            process.exit();
+        }
+    });
+
+
+    //------------------------------------------------------------------------------------------------------
+    // JavaScript
+    //------------------------------------------------------------------------------------------------------
+
+    gulp.task('scripts', function() {
+        if (jsFolder) {
+            gulp.src(jsFolder + '*.js')
+                .pipe(concat(generatedJsFile))
+                .pipe(uglify())
+                .pipe(gulp.dest(destination))
+        } else {
+            console.log(color('ERROR', 'RED'));
+            console.log(color('You need to specify which folder contains your JavaScript files. Check env.example.json for an example.', 'RED'));
+            process.exit();
+        }
+    });
+
+} else {
+    console.log(color('ERROR', 'RED'));
+    console.log(color('You need to specify the destination folder for your generated files. Check env.example.json for an example.', 'RED'));
+    process.exit();
+}
 
 
 //------------------------------------------------------------------------------------------------------
-// JAVASCRIPT
-//------------------------------------------------------------------------------------------------------
-gulp.task('scripts', function() {
-    gulp.src('../source/js/*.js')
-        .pipe(concat('script.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('../web/_/'))
-});
-
-//------------------------------------------------------------------------------------------------------
-// WATCH
+// Watch
 //------------------------------------------------------------------------------------------------------
 
 gulp.task('watch', function () {
@@ -38,4 +77,4 @@ gulp.task('watch', function () {
     gulp.watch('../source/js/*.js', ['scripts']);
 });
 
-gulp.task('default',['scripts', 'styles', 'watch']);
+gulp.task('default',['styles', 'scripts', 'watch']);
