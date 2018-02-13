@@ -12,7 +12,7 @@ gulp.task('styles', function() {
 	gulp.src('../source/sass/style.scss')
 		.pipe(sass().on('error', sass.logError))
 		.pipe(cleanCSS({compatibility: 'ie8'}))
-		.pipe(gulp.dest('../public/_/'));
+		.pipe(gulp.dest('../web/_/'));
 });
 
 
@@ -23,7 +23,7 @@ gulp.task('scripts', function() {
 	gulp.src('../source/js/*.js')
 		.pipe(concat('script.js'))
 		.pipe(uglify())
-		.pipe(gulp.dest('../public/_/'))
+		.pipe(gulp.dest('../web/_/'))
 });
 
 //------------------------------------------------------------------------------------------------------
