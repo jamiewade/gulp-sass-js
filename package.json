@@ -7,6 +7,7 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.1.0",
     "gulp-clean-css": "^2.3.2",
+    "gulp-color": "0.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^3.0.0",
     "gulp-uglify": "^2.0.0"
