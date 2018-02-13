@@ -1,18 +1,21 @@
 var gulp = require('gulp'),
-	sass = require('gulp-sass'),
-	cleanCSS = require('gulp-clean-css'),
-	uglify = require('gulp-uglify'),
-	concat = require('gulp-concat');
+    autoprefixer = require('gulp-autoprefixer'),
+    cleanCSS = require('gulp-clean-css'),
+    concat = require('gulp-concat'),
+    sass = require('gulp-sass'),
+    uglify = require('gulp-uglify');
+
 
 //------------------------------------------------------------------------------------------------------
 // SASS
 //------------------------------------------------------------------------------------------------------
 
 gulp.task('styles', function() {
-	gulp.src('../source/sass/style.scss')
-		.pipe(sass().on('error', sass.logError))
-		.pipe(cleanCSS({compatibility: 'ie8'}))
-		.pipe(gulp.dest('../web/_/'));
+    gulp.src('../source/sass/style.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(autoprefixer())
+        .pipe(gulp.dest('../web/_/'));
 });
 
 
@@ -20,10 +23,10 @@ gulp.task('styles', function() {
 // JAVASCRIPT
 //------------------------------------------------------------------------------------------------------
 gulp.task('scripts', function() {
-	gulp.src('../source/js/*.js')
-		.pipe(concat('script.js'))
-		.pipe(uglify())
-		.pipe(gulp.dest('../web/_/'))
+    gulp.src('../source/js/*.js')
+        .pipe(concat('script.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('../web/_/'))
 });
 
 //------------------------------------------------------------------------------------------------------
@@ -31,8 +34,8 @@ gulp.task('scripts', function() {
 //------------------------------------------------------------------------------------------------------
 
 gulp.task('watch', function () {
-	gulp.watch('../source/sass/**/*.scss', ['styles']);
-	gulp.watch('../source/js/*.js', ['scripts']);
+    gulp.watch('../source/sass/**/*.scss', ['styles']);
+    gulp.watch('../source/js/*.js', ['scripts']);
 });
 
 gulp.task('default',['scripts', 'styles', 'watch']);
