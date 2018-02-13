@@ -4,9 +4,10 @@
 
 var env = require('./env.json');
     destination = env.destination,
-    sassFile = env.sassFile,
     jsFolder = env.jsFolder,
-    generatedJsFile = env.generatedJsFile;
+    generatedJsFile = env.generatedJsFile,
+    productionMode = env.productionMode,
+    sassFile = env.sassFile;
 
 
 //------------------------------------------------------------------------------------------------------
@@ -18,6 +19,7 @@ var gulp = require('gulp'),
     cleanCSS = require('gulp-clean-css'),
     color = require('gulp-color'),
     concat = require('gulp-concat'),
+    gulpif = require('gulp-if'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
@@ -33,7 +35,7 @@ if (destination) {
         if (sassFile) {
             gulp.src(sassFile)
                 .pipe(sass().on('error', sass.logError))
-                .pipe(cleanCSS({compatibility: 'ie8'}))
+                .pipe(gulpif(productionMode == true, cleanCSS({compatibility: 'ie8'})))
                 .pipe(autoprefixer())
                 .pipe(gulp.dest(destination));
         } else {
@@ -48,11 +50,13 @@ if (destination) {
     // JavaScript
     //------------------------------------------------------------------------------------------------------
 
+    var condition = false;
+
     gulp.task('scripts', function() {
         if (jsFolder) {
             gulp.src(jsFolder + '*.js')
                 .pipe(concat(generatedJsFile))
-                .pipe(uglify())
+                .pipe(gulpif(productionMode == true, uglify()))
                 .pipe(gulp.dest(destination))
         } else {
             console.log(color('ERROR', 'RED'));
