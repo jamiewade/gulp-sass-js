@@ -4,8 +4,9 @@
 
 var env = require('./env.json');
     destination = env.destination,
+    cssFileName = env.generatedCssFileName,
+    jsFileName = env.generatedJsFileName,
     jsFolder = env.jsFolder,
-    generatedJsFile = env.generatedJsFile,
     productionMode = env.productionMode,
     sassFile = env.sassFile;
 
@@ -37,6 +38,7 @@ if (destination) {
                 .pipe(sass().on('error', sass.logError))
                 .pipe(gulpif(productionMode == true, cleanCSS({compatibility: 'ie8'})))
                 .pipe(autoprefixer())
+                .pipe(concat(cssFileName + '.css'))
                 .pipe(gulp.dest(destination));
         } else {
             console.log(color('ERROR', 'RED'));
@@ -55,7 +57,7 @@ if (destination) {
     gulp.task('scripts', function() {
         if (jsFolder) {
             gulp.src(jsFolder + '*.js')
-                .pipe(concat(generatedJsFile))
+                .pipe(concat(jsFileName + '.js'))
                 .pipe(gulpif(productionMode == true, uglify()))
                 .pipe(gulp.dest(destination))
         } else {
