@@ -41,7 +41,6 @@ if (destination) {
                 .pipe(concat(cssFileName + '.css'))
                 .pipe(gulp.dest(destination));
         } else {
-            console.log(color('ERROR', 'RED'));
             console.log(color('You need to specify which folder contains your Sass files. Check env.example.json for an example.', 'RED'));
             process.exit();
         }
@@ -61,14 +60,12 @@ if (destination) {
                 .pipe(gulpif(productionMode == true, uglify()))
                 .pipe(gulp.dest(destination))
         } else {
-            console.log(color('ERROR', 'RED'));
             console.log(color('You need to specify which folder contains your JavaScript files. Check env.example.json for an example.', 'RED'));
             process.exit();
         }
     });
 
 } else {
-    console.log(color('ERROR', 'RED'));
     console.log(color('You need to specify the destination folder for your generated files. Check env.example.json for an example.', 'RED'));
     process.exit();
 }
