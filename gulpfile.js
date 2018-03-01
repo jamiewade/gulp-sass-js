@@ -23,6 +23,7 @@ var gulp = require('gulp'),
     color = require('gulp-color'),
     concat = require('gulp-concat'),
     gulpif = require('gulp-if'),
+    include = require('gulp-include'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
@@ -58,6 +59,7 @@ if (destination) {
     gulp.task('scripts', function() {
         if (jsFolder) {
             gulp.src(jsFolder + '*.js')
+                .pipe(include())
                 .pipe(concat(jsFileName + '.js'))
                 .pipe(gulpif(productionMode == true, uglify()))
                 .pipe(gulp.dest(destination))
