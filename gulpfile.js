@@ -1,41 +1,87 @@
+//------------------------------------------------------------------------------------------------------
+// Environment variables
+//------------------------------------------------------------------------------------------------------
+
+var env = require('./env.json');
+    destination = env.destination,
+    cssFileName = env.generatedCssFileName,
+    jsIncludeFile = env.jsIncludeFile,
+    jsFileName = env.generatedJsFileName,
+    jsFolder = env.jsFolder,
+    productionMode = env.productionMode,
+    sassIncludeFile = env.sassIncludeFile,
+    sassFolder = env.sassFolder;
+
+
+//------------------------------------------------------------------------------------------------------
+// Dependencies
+//------------------------------------------------------------------------------------------------------
+
 var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCSS = require('gulp-clean-css'),
+    color = require('gulp-color'),
     concat = require('gulp-concat'),
+    gulpif = require('gulp-if'),
+    include = require('gulp-include'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify');
 
 
-//------------------------------------------------------------------------------------------------------
-// SASS
-//------------------------------------------------------------------------------------------------------
+// Only run the tasks if a destination folder has been defined
+if (destination) {
 
-gulp.task('styles', function() {
-    gulp.src('../source/sass/style.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(cleanCSS({compatibility: 'ie8'}))
-        .pipe(autoprefixer())
-        .pipe(gulp.dest('../web/_/'));
-});
+    //------------------------------------------------------------------------------------------------------
+    // Sass
+    //------------------------------------------------------------------------------------------------------
+
+    gulp.task('styles', function() {
+        if (sassIncludeFile) {
+            gulp.src(sassIncludeFile)
+                .pipe(sass().on('error', sass.logError))
+                .pipe(gulpif(productionMode == true, cleanCSS({compatibility: 'ie8'})))
+                .pipe(autoprefixer())
+                .pipe(concat(cssFileName + '.css'))
+                .pipe(gulp.dest(destination));
+        } else {
+            console.log(color('You need to specify which folder contains your Sass files. Check env.example.json for an example.', 'RED'));
+            process.exit();
+        }
+    });
+
+
+    //------------------------------------------------------------------------------------------------------
+    // JavaScript
+    //------------------------------------------------------------------------------------------------------
+
+    var condition = false;
+
+    gulp.task('scripts', function() {
+        if (jsFolder) {
+            gulp.src(jsFolder + '*.js')
+                .pipe(include())
+                .pipe(concat(jsFileName + '.js'))
+                .pipe(gulpif(productionMode == true, uglify()))
+                .pipe(gulp.dest(destination))
+        } else {
+            console.log(color('You need to specify which folder contains your JavaScript files. Check env.example.json for an example.', 'RED'));
+            process.exit();
+        }
+    });
+
+} else {
+    console.log(color('You need to specify the destination folder for your generated files. Check env.example.json for an example.', 'RED'));
+    process.exit();
+}
 
 
 //------------------------------------------------------------------------------------------------------
-// JAVASCRIPT
-//------------------------------------------------------------------------------------------------------
-gulp.task('scripts', function() {
-    gulp.src('../source/js/*.js')
-        .pipe(concat('script.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('../web/_/'))
-});
-
-//------------------------------------------------------------------------------------------------------
-// WATCH
+// Watch
 //------------------------------------------------------------------------------------------------------
 
 gulp.task('watch', function () {
-    gulp.watch('../source/sass/**/*.scss', ['styles']);
-    gulp.watch('../source/js/*.js', ['scripts']);
+    gulp.watch(sassFolder + '/**/*.scss', ['styles']);
+    gulp.watch(jsFolder + '/**/*.js', ['scripts']);
 });
 
-gulp.task('default',['scripts', 'styles', 'watch']);
+gulp.task('default',['styles', 'scripts', 'watch']);
