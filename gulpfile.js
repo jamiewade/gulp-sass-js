@@ -5,10 +5,12 @@
 var env = require('./env.json');
     destination = env.destination,
     cssFileName = env.generatedCssFileName,
+    jsIncludeFile = env.jsIncludeFile,
     jsFileName = env.generatedJsFileName,
     jsFolder = env.jsFolder,
     productionMode = env.productionMode,
-    sassFile = env.sassFile;
+    sassIncludeFile = env.sassIncludeFile,
+    sassFolder = env.sassFolder;
 
 
 //------------------------------------------------------------------------------------------------------
@@ -33,8 +35,8 @@ if (destination) {
     //------------------------------------------------------------------------------------------------------
 
     gulp.task('styles', function() {
-        if (sassFile) {
-            gulp.src(sassFile)
+        if (sassIncludeFile) {
+            gulp.src(sassIncludeFile)
                 .pipe(sass().on('error', sass.logError))
                 .pipe(gulpif(productionMode == true, cleanCSS({compatibility: 'ie8'})))
                 .pipe(autoprefixer())
@@ -76,8 +78,8 @@ if (destination) {
 //------------------------------------------------------------------------------------------------------
 
 gulp.task('watch', function () {
-    gulp.watch('../source/sass/**/*.scss', ['styles']);
-    gulp.watch('../source/js/*.js', ['scripts']);
+    gulp.watch(sassFolder + '/**/*.scss', ['styles']);
+    gulp.watch(jsFolder + '/**/*.js', ['scripts']);
 });
 
 gulp.task('default',['styles', 'scripts', 'watch']);
