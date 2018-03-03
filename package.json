@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "author": "Jamie Wade",
   "devDependencies": {
+    "browser-sync": "2.23.6",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "4.1.0",
     "gulp-clean-css": "2.3.2",
