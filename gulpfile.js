@@ -54,8 +54,6 @@ if (destination) {
     // JavaScript
     //------------------------------------------------------------------------------------------------------
 
-    var condition = false;
-
     gulp.task('scripts', function() {
         if (jsFolder) {
             gulp.src(jsFolder + '*.js')
