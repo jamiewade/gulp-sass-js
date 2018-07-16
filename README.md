@@ -37,6 +37,7 @@ _**Note**: All folder and file paths are relative to the `env.json` file. Adjust
 
 ## Usage
 - `gulp` - Running this command starts a watch task. This automatically re-generates your CSS/JS when it detects changes to your source files
+- `gulp refresh` - Running this command re-generates your CSS/JS once, and quits when finished
 
 ## Recommended Folder Structure
 You are in full control over what your folders and file names are called, although `env.example.json` does contain some paths and file names. This is the exact folder structure `env.example.json` is expecting, in its current form:
@@ -65,4 +66,4 @@ You are in full control over what your folders and file names are called, althou
 1. The `build` folder is purely a clone of this repository, as outlined in the **Installation** step
 2. This `script.js` file is where you can set any JavaScript. You can also [include multiple JavaScript files](https://www.npmjs.com/package/gulp-include) at the top of the file, so they all get compiled into a single file
 3. This `style.scss` file is where you can include multiple Sass files, so they all get compiled into a single file
-4. This is a folder, simply named `_`, which sits in the public root of this example project, and acts as the folder where your generated `.css` and `.js` files are served from 
+4. This is a folder, simply named `_`, which sits in the public root of this example project, and acts as the folder where your generated `.css` and `.js` files are served from
